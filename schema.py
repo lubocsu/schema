@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 __version__ = '0.3.1'
 
 
@@ -80,6 +83,10 @@ def priority(s):
     if type(s) is dict:
         return 5
     if hasattr(s, 'validate'):
+        # 重新排序，类类型排在最后
+        if hasattr(s, '_schema'):
+            if type(s._schema) is type:
+                return 7
         return 4
     if issubclass(type(s), type):
         return 3
