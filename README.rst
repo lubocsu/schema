@@ -183,7 +183,7 @@ key-value pairs:
 .. code:: python
 
     >>> d = Schema({'name': str,
-    ...             'age': lambda n: 18 < 99}).validate({'name': 'Sue', 'age': 28})
+    ...             'age': lambda n: 18 <= n <= 99}).validate({'name': 'Sue', 'age': 28})
 
     >>> assert d == {'name': 'Sue', 'age': 28}
 
@@ -224,6 +224,19 @@ You can mark a key as optional as follows:
     >>> Schema({'name': str,
     ...         Optional('occupation'): str}).validate({'name': 'Sam'})
     {'name': 'Sam'}
+
+``Optional`` keys can also carry a ``default``, to be used when no key in the
+data matches:
+
+.. code:: python
+
+    >>> from schema import Optional
+    >>> Schema({Optional('color', default='blue'): str,
+    ...         str: str}).validate({'texture': 'furry'})
+    {'color': 'blue', 'texture': 'furry'}
+
+Defaults are used verbatim, not passed through any validators specified in the
+value.
 
 **schema** has classes ``And`` and ``Or`` that help validating several schemas
 for the same data:
